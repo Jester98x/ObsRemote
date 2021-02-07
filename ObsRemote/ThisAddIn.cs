@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.Office.Interop.PowerPoint;
+using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace ObsRemote
 {
@@ -28,7 +28,7 @@ namespace ObsRemote
 			}
 		}
 
-		private void Application_SlideShowNextSlide(SlideShowWindow Wn)
+		private void Application_SlideShowNextSlide(PowerPoint.SlideShowWindow Wn)
 		{
 			if (Wn == null)
 			{
@@ -40,7 +40,7 @@ namespace ObsRemote
 			SwitchScene(Wn);
 		}
 
-		private void SwitchScene(SlideShowWindow Wn)
+		private void SwitchScene(PowerPoint.SlideShowWindow Wn)
 		{
 			var sceneChanged = false;
 
@@ -61,9 +61,9 @@ namespace ObsRemote
 
 			foreach (var obsCommand in obsCommands)
 			{
-				if (obsCommand.StartsWith("OBS:", StringComparison.OrdinalIgnoreCase))
+				if (obsCommand.StartsWith("OBSScene:", StringComparison.OrdinalIgnoreCase))
 				{
-					var obsSceneName = obsCommand.Substring(4).Trim();
+					var obsSceneName = obsCommand.Substring(9).Trim();
 					if (_currentScene != obsSceneName)
 					{
 						// Only change the scene if there is a need to
@@ -74,19 +74,29 @@ namespace ObsRemote
 					_currentScene = obsSceneName;
 				}
 
-				if (obsCommand.StartsWith("OBSDEF:", StringComparison.OrdinalIgnoreCase))
+				if (obsCommand.StartsWith("OBSDefault:", StringComparison.OrdinalIgnoreCase))
 				{
-					_obs.DefaultScene = obsCommand.Substring(7).Trim();
+					_obs.DefaultScene = obsCommand.Substring(11).Trim();
 				}
 
-				if (obsCommand.StartsWith("**START"))
+				if (obsCommand.StartsWith("OBSRecord: start", StringComparison.OrdinalIgnoreCase))
 				{
 					_obs.StartRecording();
 				}
 
-				if (obsCommand.StartsWith("**STOP"))
+				if (obsCommand.StartsWith("OBSRecord: stop", StringComparison.OrdinalIgnoreCase))
 				{
 					_obs.StopRecording();
+				}
+
+				if (obsCommand.StartsWith("OBSStream: start", StringComparison.OrdinalIgnoreCase))
+				{
+					_obs.StartStreaming();
+				}
+
+				if (obsCommand.StartsWith("OBSStream: stop", StringComparison.OrdinalIgnoreCase))
+				{
+					_obs.StopStreaming();
 				}
 			}
 
@@ -109,8 +119,8 @@ namespace ObsRemote
 		/// </summary>
 		private void InternalStartup()
 		{
-			Startup += new EventHandler(ThisAddIn_Startup);
-			Shutdown += new EventHandler(ThisAddIn_Shutdown);
+			this.Startup += new EventHandler(ThisAddIn_Startup);
+			this.Shutdown += new EventHandler(ThisAddIn_Shutdown);
 		}
 
 		#endregion

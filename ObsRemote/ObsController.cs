@@ -89,7 +89,10 @@ namespace ObsRemote
 			{
 				_obs.Api.StartRecording();
 			}
-			catch {  /* Recording already started */ }
+			catch
+			{
+				// Recording already started
+			}
 
 			return true;
 		}
@@ -106,7 +109,48 @@ namespace ObsRemote
 			{
 				_obs.Api.StopRecording();
 			}
-			catch {  /* Recording already stopped */ }
+			catch
+			{
+				// Recording already stopped
+			}
+
+			return true;
+		}
+
+		public bool StartStreaming()
+		{
+			if (!_connected)
+			{
+				return false;
+			}
+
+			try
+			{
+				_obs.Api.StartStreaming();
+			}
+			catch
+			{
+				// Streaming has already started
+			}
+
+			return true;
+		}
+
+		public bool StopStreaming()
+		{
+			if (!_connected)
+			{
+				return false;
+			}
+
+			try
+			{
+				_obs.Api.StopStreaming();
+			}
+			catch
+			{
+				// Streaming has already stopped
+			}
 
 			return true;
 		}
