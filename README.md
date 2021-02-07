@@ -19,6 +19,7 @@ Thanks Scott - it's ringing together amazing ideas like this that makes developm
 Add commands as presenter notes on a slide in PowerPoint.
 
 * Active an OBS scene
+
 ```OBSScene: {OBS scene name}```
 
 Example:
@@ -26,6 +27,7 @@ Example:
 ```OBSScene: Just Chatting```
 
 * Set a fallback or default scene, i.e. which seen to go to if one hasn't been defined in the slide notes
+
 ```OBSDefault: {OBS scene name}```
 
 Example:
@@ -33,15 +35,19 @@ Example:
 ```OBSDefault: Presentation Only```
 
 * Start recording
+
 ```OBSRecord: start```
 
 * Stop recording
+
 ```OBSRecord: stop```
 
 * Start streaming
+
 ```OBSStream: start```
 
 * Stop streaming
+
 ```OBSStream: stop```
 
 ## Advanced Usage
