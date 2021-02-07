@@ -6,12 +6,39 @@ namespace ObsRemote
 	public partial class ThisAddIn
 	{
 		private ObsController _obs;
-		private string _currentScene;
 
 		private void ThisAddIn_Startup(object sender, EventArgs e)
 		{
 			Application.SlideShowNextSlide += Application_SlideShowNextSlide;
 			InitObs();
+			_obs.RecordingStateChanged += Obs_RecordingStateChanged;
+			_obs.StreamingStateChanged += Obs_StreamingStateChanged;
+		}
+
+		private void Obs_StreamingStateChanged(object sender, EventArgs e)
+		{
+			// Do something to indicate that OBS is streaming or not
+			if (((StreamingStateEventArgs)e).IsStreaming)
+			{
+				// We're stremaing !!!
+			}
+			else
+			{
+				// We're not streaming !!!
+			}
+		}
+
+		private void Obs_RecordingStateChanged(object sender, EventArgs e)
+		{
+			// Do somting to indicate that OBS is recording or not
+			if (((RecordingStateEventArgs)e).IsRecording)
+			{
+				// We're recording !!!
+			}
+			else
+			{
+				// We're not recording !!!
+			}
 		}
 
 		private void InitObs()
@@ -64,39 +91,23 @@ namespace ObsRemote
 				if (obsCommand.StartsWith("OBSScene:", StringComparison.OrdinalIgnoreCase))
 				{
 					var obsSceneName = obsCommand.Substring(9).Trim();
-					if (_currentScene != obsSceneName)
-					{
-						// Only change the scene if there is a need to
-						_obs.ChangeScene(obsSceneName);
-					}
+
+					_obs.ChangeScene(obsSceneName);
 
 					sceneChanged = true;
-					_currentScene = obsSceneName;
 				}
 
 				if (obsCommand.StartsWith("OBSDefault:", StringComparison.OrdinalIgnoreCase))
 				{
 					_obs.DefaultScene = obsCommand.Substring(11).Trim();
 				}
-
-				if (obsCommand.StartsWith("OBSRecord: start", StringComparison.OrdinalIgnoreCase))
+				else if (obsCommand.StartsWith("OBSRecord:", StringComparison.OrdinalIgnoreCase))
 				{
-					_obs.StartRecording();
+					_obs.StartStopRecording(obsCommand.Substring(10).Trim());
 				}
-
-				if (obsCommand.StartsWith("OBSRecord: stop", StringComparison.OrdinalIgnoreCase))
+				else if (obsCommand.StartsWith("OBSStream:", StringComparison.OrdinalIgnoreCase))
 				{
-					_obs.StopRecording();
-				}
-
-				if (obsCommand.StartsWith("OBSStream: start", StringComparison.OrdinalIgnoreCase))
-				{
-					_obs.StartStreaming();
-				}
-
-				if (obsCommand.StartsWith("OBSStream: stop", StringComparison.OrdinalIgnoreCase))
-				{
-					_obs.StopStreaming();
+					_obs.StartStopStreaming(obsCommand.Substring(10).Trim());
 				}
 			}
 
@@ -119,8 +130,8 @@ namespace ObsRemote
 		/// </summary>
 		private void InternalStartup()
 		{
-			this.Startup += new EventHandler(ThisAddIn_Startup);
-			this.Shutdown += new EventHandler(ThisAddIn_Shutdown);
+			Startup += ThisAddIn_Startup;
+			Shutdown += ThisAddIn_Shutdown;
 		}
 
 		#endregion
