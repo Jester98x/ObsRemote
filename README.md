@@ -7,7 +7,7 @@ Inspired by Scott Hanselman's PowerPointToOBSSceneSwitcher:
 * [GitHub](https://github.com/shanselman/PowerPointToOBSSceneSwitcher)
 * [YouTube](https://www.youtube.com/watch?v=ciNcxi2bPwM)
 
-Thanks Scott - it's ringing together amazing ideas like this that makes development so much fun!!
+Thanks Scott - it's bringing together amazing ideas like this that makes development so much fun!!
 
 ## Requirements
 * [OBS](https://obsproject.com/)
@@ -18,7 +18,7 @@ Thanks Scott - it's ringing together amazing ideas like this that makes developm
 
 Add commands as presenter notes on a slide in PowerPoint.
 
-* Active an OBS scene
+* Activate an OBS scene
 
 ```OBSScene: {OBS scene name}```
 
@@ -52,7 +52,7 @@ Example:
 
 ## Advanced Usage
 
-* Set the default screen, goto the startup scene in OBS and start recording
+* Set 'Presentation only' as the default scene, go to the 'StartUp' scene in OBS and start recording
 ```
 	OBSDefault: Presentation only
 	OBSScene: StartUp
