@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace ObsRemote
@@ -6,6 +7,7 @@ namespace ObsRemote
 	public partial class ThisAddIn
 	{
 		private ObsController _obs;
+		private bool _canSwitchScene = true;
 
 		private void ThisAddIn_Startup(object sender, EventArgs e)
 		{
@@ -86,6 +88,8 @@ namespace ObsRemote
 				return;
 			}
 
+			HandleNoSceneSwitch(obsCommands);
+
 			foreach (var obsCommand in obsCommands)
 			{
 				if (obsCommand.StartsWith("OBSScene:", StringComparison.OrdinalIgnoreCase))
@@ -111,9 +115,19 @@ namespace ObsRemote
 				}
 			}
 
-			if (!sceneChanged)
+			if (_canSwitchScene && !sceneChanged)
 			{
 				_obs.GotoDefault();
+			}
+
+			_canSwitchScene = true;
+		}
+
+		private void HandleNoSceneSwitch(string[] obsCommands)
+		{
+			if(obsCommands.Contains("OBSStay", StringComparer.OrdinalIgnoreCase))
+			{
+				_canSwitchScene = false;
 			}
 		}
 
