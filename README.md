@@ -50,6 +50,10 @@ Example:
 
 ```OBSStream: stop```
 
+* Do not switch scenes or go to the default
+
+```OBSStay```
+
 ## Advanced Usage
 
 * Set 'Presentation only' as the default scene, go to the 'StartUp' scene in OBS and start recording
